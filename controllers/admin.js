@@ -57,3 +57,12 @@ exports.login = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({ success: true, token });
 });
+
+// @desc      Get current logged in user
+// @route     Get /api/auth/me
+// @access    Private
+exports.getMe = asyncHandler(async (req, res, next) => {
+  
+  const user = await User.findById(req.user.id).select("-role").select("-email").select("-_id").select("-createdAt")
+  res.status(200).json(user);
+});

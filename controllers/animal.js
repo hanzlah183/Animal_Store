@@ -7,7 +7,14 @@ const ErrorResponse = require("../utils/errorResponse");
 // @access    Public
 exports.getAnimals = asyncHandler(async (req, res, next) => {
   const animal = await Animal.find();
-  res.status(200).json({ success: true, data: animal });
+  res.status(200).json(animal);
+});
+// @desc      Get single animals
+// @route     GET /api/v1/animals
+// @access    Private
+exports.getAnimal = asyncHandler(async (req, res, next) => {
+  const animal = await Animal.findById(req.params.id)
+  res.status(200).json(animal);
 });
 
 // @desc      Create new animals
@@ -22,10 +29,7 @@ exports.createAnimal = asyncHandler(async (req, res, next) => {
 
   animal = await Animal.create(req.body);
 
-  res.status(201).json({
-    success: true,
-    data: animal
-  });
+  res.status(201).json(animal);
 });
 
 // @desc      Update animals
@@ -40,12 +44,12 @@ exports.updateAnimal = asyncHandler(async (req, res, next) => {
     );
   }
 
-  animal = await Animal.findOneAndUpdate(req.params.id, req.body, {
+  animal = await Animal.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true
   });
 
-  res.status(200).json({ success: true, data: animal });
+  res.status(200).json(animal);
 });
 
 // @desc      Delete animals
@@ -62,5 +66,5 @@ exports.deleteAnimal = asyncHandler(async (req, res, next) => {
 
   animal.remove();
 
-  res.status(200).json({ success: true, data: "animal deleted" });
+  res.status(200).json("animal deleted");
 });
